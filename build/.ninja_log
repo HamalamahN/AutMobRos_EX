@@ -1,0 +1,7 @@
+# ninja log v5
+23	80	0	copyHalConfig	ba988dddd7d1e96a
+86	26602	1650978145325653500	CMakeFiles/template_project.dir/src/MyRobotSafetyProperties.cpp.o	5462bbde00d31cb1
+82	29978	1650978146457123400	CMakeFiles/template_project.dir/src/ControlSystem.cpp.o	8435568a2699748e
+93	30653	1650978149389177500	CMakeFiles/template_project.dir/src/main.cpp.o	2515813d3ab46daf
+30683	32075	1650978150820305200	template_project	e4701bfa1e584dcf
+24	56	0	copyHalConfig	ba988dddd7d1e96a
