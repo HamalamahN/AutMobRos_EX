@@ -3,7 +3,7 @@
 MyRobotSafetyProperties::MyRobotSafetyProperties(ControlSystem &cs, double dt)
     : cs(cs),
     
-            slSystemOff("System is offline"),
+      slSystemOff("System is offline"),
       slShuttingDown("System shutting down"),
       slBraking("System braking"),
       slStartingUp("System starting up"),
