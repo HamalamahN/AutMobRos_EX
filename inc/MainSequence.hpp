@@ -32,9 +32,12 @@ public:
         {
             sleep(1.0);
             log.info() << cs.myquat.getOut().getSignal();
-            // SetPos(1.5);
-            // sleep(1.0);
-            // SetPos(-1.5);
+            log.info() << cs.posVal.getOut().getSignal();
+            SetPos(1.5);
+            sleep(1.0);
+            log.info() << cs.myquat.getOut().getSignal();
+            log.info() << cs.posVal.getOut().getSignal();
+            SetPos(-1.5);
         }
         return 0;
     }
