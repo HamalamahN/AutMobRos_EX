@@ -19,6 +19,7 @@ public:
     PeripheralInput<> myquat;
     PeripheralOutput<> myservo;
     Gain<> mygain;
+    Constant<> posVal;
 
     TimeDomain timedomain;
 };
