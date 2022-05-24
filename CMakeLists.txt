@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.1)
-project(template_project_safety)   # MODIFY Project name
+project(template_project_condition)   # MODIFY Project name
 
 set(CMAKE_CXX_STANDARD 14)
 

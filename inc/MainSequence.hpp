@@ -4,22 +4,26 @@
 #include <eeros/sequencer/Sequencer.hpp>
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
-#include "MyRobotSafetyProperties.hpp"
+#include "AutMobRoSSafetyProperties.hpp"
 #include "ControlSystem.hpp"
 #include <eeros/sequencer/Wait.hpp>
+#include "customSteps/SetServoPos.hpp"
+
 
 class MainSequence : public eeros::sequencer::Sequence
 {
 public:
     MainSequence(std::string name, eeros::sequencer::Sequencer &seq,
                  eeros::safety::SafetySystem &ss,
-                 MyRobotSafetyProperties &sp, ControlSystem &cs)
+                 AutMobRoSSafetyProperties &sp, ControlSystem &cs)
         : eeros::sequencer::Sequence(name, seq),
           ss(ss),
           sp(sp),
           cs(cs),
 
-          sleep("Sleep", this)
+          sleep("Sleep", this),
+          ServPos("ServPos", this, cs)
+          
     {
         log.info() << "Sequence created: " << name;
     }
@@ -29,17 +33,25 @@ public:
         while (eeros::sequencer::Sequencer::running)
         {
             sleep(1.0);
-            log.info() << cs.myGain.getOut().getSignal();
+            log.info() << cs.q1.getOut().getSignal();
+            ServPos(1.5);
+            // log.info() << cs.myConstant.getOut().getSignal();
+            sleep(1.0);
+            ServPos(-1.5);
+            // log.info() << cs.myConstant.getOut().getSignal();
+
         }
         return 0;
     }
 
+
 private:
     eeros::safety::SafetySystem &ss;
     ControlSystem &cs;
-    MyRobotSafetyProperties &sp;
+    AutMobRoSSafetyProperties &sp;
 
     eeros::sequencer::Wait sleep;
+    SetServoPos ServPos;
 };
 
 #endif // MAINSEQUENCE_HPP_
