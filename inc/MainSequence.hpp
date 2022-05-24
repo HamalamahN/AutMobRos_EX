@@ -45,6 +45,7 @@ public:
             sleep(1.0);
             ServPos(-1.5);
             // log.info() << cs.myConstant.getOut().getSignal();
+            log.info() << "Right Motor Encoder" << cs.e1.getOut().getSignal();
 
         }
         return 0;

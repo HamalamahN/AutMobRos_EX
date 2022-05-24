@@ -7,6 +7,7 @@
 #include <eeros/control/Gain.hpp>
 #include <eeros/control/PeripheralInput.hpp>
 #include <eeros/control/PeripheralOutput.hpp>
+#include <eeros/control/Saturation.hpp>
 
 using namespace eeros::control;
 
@@ -20,6 +21,19 @@ public:
     PeripheralInput<> q1;
     PeripheralOutput<> s1;
     Gain<> myGain;
+
+    // Define Gains for Interfacing DC Motor and Encoder
+    Gain<> k;
+    Gain<> i;
+    Gain<> kM;
+    Gain<> R;
+    // Define Encorder
+    PeripheralInput<> e1;
+    // Saturation
+    Saturation<> sat;
+    // Drive Motor
+    PeripheralOutput<> M1;
+
 
     TimeDomain timedomain;
 };
