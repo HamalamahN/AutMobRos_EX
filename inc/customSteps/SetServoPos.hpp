@@ -16,9 +16,7 @@ public:
       return mytest();
       }  // implement whatever your condition should check
     bool mytest() {
-        bool check = false;
-        if (cs.q1.getOut().getSignal().getValue() <0.1) {check = true;}
-        return check;
+        return cs.q1.getOut().getSignal().getValue() >0.1 || cs.q1.getOut().getSignal().getValue() <-0.1;
     }
 };
 
@@ -27,11 +25,10 @@ class SetServoPos : public eeros::sequencer::Step
 public:
     SetServoPos(std::string name, eeros::sequencer::Sequence *caller, ControlSystem &cs)
         : eeros::sequencer::Step(name, caller),
-        cs(cs),
-        myTiltCondition(cs)
+        cs(cs)
     {
         log.info() << "Step created: " << name;
-        eeros::sequencer::Monitor TiltMonitor("TiltMon", this, myTiltCondition);
+        
     }
 
     int action()
@@ -49,8 +46,8 @@ private:
     double pos;
     ControlSystem &cs;
     // Define variables, conditions, monitors, exception sequences, ...
-    TiltCondition myTiltCondition;
-    eeros::sequencer::Monitor TiltMonitor();
+    
+    
 
 };
 
