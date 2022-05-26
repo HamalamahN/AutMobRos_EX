@@ -38,9 +38,11 @@ public:
     {
         while (eeros::sequencer::Sequencer::running)
         {
-            sleep(1.0);
+
             log.info() << cs.q1.getOut().getSignal();
             log.info() << cs.R.getOut().getSignal();
+            sleep(1.0);
+            
             // ServPos(1.5);
             // log.info() << cs.myConstant.getOut().getSignal();
             // sleep(1.0);
