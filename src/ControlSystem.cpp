@@ -1,31 +1,35 @@
 #include "ControlSystem.hpp"
 
 ControlSystem::ControlSystem(double dt)
-    : timedomain("Main time domain", dt, true),
+    : 
         e1("enc1"),
         e4("enc4"),
+        e(),
         Kp(pow((dt/(4.4*0.7)),2.0)),
+        deriv(),
         Kd_(dt*2.0/4.4), 
-        i_(104.0/3441.0), 
-        kM_(1.0/0.00844), 
-        Qmax(0.1),  
-        R(8.0),
+        qc_2(),
         M(0.00007444),
-        M1("motor1")
+        Qmax(0.1),
+        i_(104.0/3441.0), 
+        kM_(1.0/0.00844),     
+        R(8.0),   
+        M1("motor1"),
+        timedomain("Main time domain", dt, true)
 {
     // Name all blocks
     e1.setName("Encoder1");
     e4.setName("Encoder4");
-    Kp.setName("Gain Kp");
-    Kd_.setName("Gain Kd");
-    M.setName("Proportianal J");
-    i_.setName("Inverse Ratio");
-    kM_.setName("Inverse Motor Torque Constant");
-    Qmax.setName("Motor Torque Saturation");  
-    R.setName("Resistance");
     e.setName("Position Error");
-    qc_2.setName("Second derivatice of qc");
+    Kp.setName("Gain Kp");
     deriv.setName("Derivative");
+    Kd_.setName("Gain Kd");
+    qc_2.setName("Second derivatice of qc");
+    M.setName("Proportianal J");
+    Qmax.setName("Motor Torque Saturation"); 
+    i_.setName("Inverse Ratio");
+    kM_.setName("Inverse Motor Torque Constant"); 
+    R.setName("Resistance"); 
     M1.setName("Motor1");
 
 
@@ -34,14 +38,16 @@ ControlSystem::ControlSystem(double dt)
     e4.getOut().getSignal().setName("Encoder 4 Signal");
     e.getOut().getSignal().setName("Error Signal");
     Kp.getOut().getSignal().setName("Kp Gain");
+    deriv.getOut().getSignal().setName("Derivative signal");
     Kd_.getOut().getSignal().setName("Kd Gain");
+    qc_2.getOut().getSignal().setName("qc_2");
     M.getOut().getSignal().setName("M Gain");
+    Qmax.getOut().getSignal().setName(" Qmax Saturation");
     i_.getOut().getSignal().setName("i gain");
     kM_.getOut().getSignal().setName("kM Gain");
-    Qmax.getOut().getSignal().setName(" Qmax Saturation");
     R.getOut().getSignal().setName("Resistance Gain");
-    qc_2.getOut().getSignal().setName("qc_2");
-    deriv.getOut().getSignal().setName("Derivative signal");
+
+    
     // Connect signals
     e.getIn(0).connect(e4.getOut());
     e.getIn(1).connect(e1.getOut());
@@ -57,19 +63,20 @@ ControlSystem::ControlSystem(double dt)
     kM_.getIn().connect(i_.getOut());
     R.getIn().connect(kM_.getOut());
     M1.getIn().connect(R.getOut());
+
     // Add blocks to timedomain
     timedomain.addBlock(e1);
     timedomain.addBlock(e4);
     timedomain.addBlock(e);
-    timedomain.addBlock(Kd_);
     timedomain.addBlock(Kp);
+    timedomain.addBlock(deriv);
+    timedomain.addBlock(Kd_);
+    timedomain.addBlock(qc_2);
     timedomain.addBlock(M);
     timedomain.addBlock(Qmax);
     timedomain.addBlock(i_);
     timedomain.addBlock(kM_);
     timedomain.addBlock(R);
-    timedomain.addBlock(qc_2);
-    timedomain.addBlock(deriv);
     timedomain.addBlock(M1);
 
     // Add timedomain to executor

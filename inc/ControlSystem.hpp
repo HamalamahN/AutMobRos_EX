@@ -30,10 +30,9 @@ public:
     Gain<> kM_;
     Gain<> R;
     PeripheralOutput<> M1;
-
     Sum<> e;
     Sum<> qc_2;
-
+    
     TimeDomain timedomain;
 };
 

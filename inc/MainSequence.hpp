@@ -29,7 +29,9 @@ public:
         while (eeros::sequencer::Sequencer::running)
         {
             sleep(0.5);
-            log.info() << cs.e.getOut().getSignal();
+            log.info() << cs.deriv.getOut().getSignal();
+            log.info() << cs.Kd_.getOut().getSignal();
+            
 
 
 
