@@ -32,6 +32,7 @@ ControlSystem::ControlSystem(double dt)
     // Name all signals
     e1.getOut().getSignal().setName("Encoder 1 Signal");
     e4.getOut().getSignal().setName("Encoder 4 Signal");
+    e.getOut().getSignal().setName("Error Signal");
     Kp.getOut().getSignal().setName("Kp Gain");
     Kd_.getOut().getSignal().setName("Kd Gain");
     M.getOut().getSignal().setName("M Gain");
@@ -39,7 +40,6 @@ ControlSystem::ControlSystem(double dt)
     kM_.getOut().getSignal().setName("kM Gain");
     Qmax.getOut().getSignal().setName(" Qmax Saturation");
     R.getOut().getSignal().setName("Resistance Gain");
-    e.getOut().getSignal().setName("Error Signal");
     qc_2.getOut().getSignal().setName("qc_2");
     deriv.getOut().getSignal().setName("Derivative signal");
     // Connect signals
@@ -60,6 +60,7 @@ ControlSystem::ControlSystem(double dt)
     // Add blocks to timedomain
     timedomain.addBlock(e1);
     timedomain.addBlock(e4);
+    timedomain.addBlock(e);
     timedomain.addBlock(Kd_);
     timedomain.addBlock(Kp);
     timedomain.addBlock(M);
@@ -67,7 +68,6 @@ ControlSystem::ControlSystem(double dt)
     timedomain.addBlock(i_);
     timedomain.addBlock(kM_);
     timedomain.addBlock(R);
-    timedomain.addBlock(e);
     timedomain.addBlock(qc_2);
     timedomain.addBlock(deriv);
     timedomain.addBlock(M1);
