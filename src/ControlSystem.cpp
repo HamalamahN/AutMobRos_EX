@@ -1,65 +1,78 @@
 #include "ControlSystem.hpp"
 
 ControlSystem::ControlSystem(double dt)
-    : myConstant(1.5), myGain(1.0), q1("quat1"), s1("servo1"), e1("enc1"),
-      timedomain("Main time domain", dt, true),
-      k(0.0047746), i(104/3441), kM(1/0.00844), sat(0.03), M1("motor4"), R(8)
+    : timedomain("Main time domain", dt, true),
+        e1("enc1"),
+        e4("enc4"),
+        Kp(pow((dt/(4.4*0.7)),2)),
+        Kd(2*dt/4.4), 
+        i_(104/3441), 
+        kM_(1/0.00844), 
+        Qmax(0.1),  
+        R(8),
+        M(0.00007444),
+        M1("motor1")
 {
     // Name all blocks
-    myConstant.setName("My constant Position");
-    myGain.setName("My gain");
-    q1.setName("Quaternion X");
-    s1.setName("Servo1");
-
-
     e1.setName("Encoder1");
-    k.setName("Gain K");
-    i.setName("Ratio");
-    kM.setName("Motor Torque Constant");
-    sat.setName("Motor Velocity Saturation");
-    M1.setName("Motor4");
+    e4.setName("Encoder4");
+    Kp.setName("Gain Kp");
+    Kd.setName("Gain Kd");
+    M.setName("Proportianal J");
+    i_.setName("Inverse Ratio");
+    kM_.setName("Inverse Motor Torque Constant");
+    Qmax.setName("Motor Torque Saturation");  
     R.setName("Resistance");
+    e.setName("Position Error");
+    qc_2.setName("Second derivatice of qc");
+    qc_2.setInitCondition(0,0.1);
+    qc_2.setInitCondition(1,0.0005);
+    deriv.setName("Derivative");
+    M1.setName("Motor1");
 
 
     // Name all signals
-    myConstant.getOut().getSignal().setName("My constant Position value");
-    myGain.getOut().getSignal().setName("My Position value multiplied with my gain");
-    q1.getOut().getSignal().setName("My Quaternion Angle/2");
-
-
-    e1.getOut().getSignal().setName(" Encoder Signal Right Motor");
-    k.getOut().getSignal().setName("qd1");
-    sat.getOut().getSignal().setName("qd1sat");
-    i.getOut().getSignal().setName("omega1");
-    kM.getOut().getSignal().setName("U1");
-    R.getOut().getSignal().setName("ResistanceSignal");
-
-    
-
+    e1.getOut().getSignal().setName("Encoder 1 Signal");
+    e4.getOut().getSignal().setName("Encoder 4 Signal");
+    Kp.getOut().getSignal().setName("Kp Gain");
+    Kd.getOut().getSignal().setName("Kd Gain");
+    M.getOut().getSignal().setName("M Gain");
+    i_.getOut().getSignal().setName("i gain");
+    kM_.getOut().getSignal().setName("kM Gain");
+    Qmax.getOut().getSignal().setName(" Qmax Saturation");
+    R.getOut().getSignal().setName("Resistance Gain");
+    e.getOut().getSignal().setName("Error Signal");
+    qc_2.getOut().getSignal().setName("qc_2");
+    deriv.getOut().getSignal().setName("Derivative signal");
     // Connect signals
-    myGain.getIn().connect(myConstant.getOut());
-    s1.getIn().connect(myGain.getOut());
-
-    k.getIn().connect(e1.getOut());
-    sat.getIn().connect(k.getOut());
-    i.getIn().connect(sat.getOut());
-    kM.getIn().connect(i.getOut());
-    R.getIn().connect(kM.getOut());
+    e.getIn(0).connect(e1.getOut());
+    e.getIn(1).connect(e4.getOut());
+    e.negateInput(1);
+    Kp.getIn().connect(e.getOut());
+    deriv.getIn().connect(e.getOut());
+    Kd.getIn().connect(deriv.getOut());
+    qc_2.getIn(0).connect(Kp.getOut());
+    qc_2.getIn(1).connect(Kd.getOut());
+    M.getIn().connect(qc_2.getOut());
+    Qmax.getIn().connect(M.getOut());
+    i_.getIn().connect(Qmax.getOut());
+    kM_.getIn().connect(i_.getOut());
+    R.getIn().connect(kM_.getOut());
     M1.getIn().connect(R.getOut());
-
     // Add blocks to timedomain
-    timedomain.addBlock(myConstant);
-    timedomain.addBlock(myGain);
-    timedomain.addBlock(q1);
-    timedomain.addBlock(s1);
     timedomain.addBlock(e1);
-
-    timedomain.addBlock(k);
-    timedomain.addBlock(sat);
-    timedomain.addBlock(i);
-    timedomain.addBlock(kM);
-    timedomain.addBlock(M1);
+    timedomain.addBlock(e4);
+    timedomain.addBlock(Kp);
+    timedomain.addBlock(Kd);
+    timedomain.addBlock(M);
+    timedomain.addBlock(Qmax);
+    timedomain.addBlock(i_);
+    timedomain.addBlock(kM_);
     timedomain.addBlock(R);
+    timedomain.addBlock(e);
+    timedomain.addBlock(qc_2);
+    timedomain.addBlock(deriv);
+    timedomain.addBlock(M1);
 
     // Add timedomain to executor
     eeros::Executor::instance().add(timedomain);

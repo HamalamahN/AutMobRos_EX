@@ -7,8 +7,6 @@
 #include "AutMobRoSSafetyProperties.hpp"
 #include "ControlSystem.hpp"
 #include <eeros/sequencer/Wait.hpp>
-#include "customSteps/SetServoPos.hpp"
-#include "customSequences/TiltException.hpp"
 
 
 class MainSequence : public eeros::sequencer::Sequence
@@ -21,17 +19,9 @@ public:
             ss(ss),
             sp(sp),
             cs(cs),
-
-            sleep("Sleep", this),
-            ServPos("ServPos", this, cs),
-            myTiltCondition(cs),
-            myTiltException("TiltExep", this, cs),
-            TiltMonitor("TiltMon", this, myTiltCondition, eeros::sequencer::SequenceProp::resume, &myTiltException)
-          
+            sleep("Sleep", this)     
     {
         log.info() << "Sequence created: " << name;
-        addMonitor(&TiltMonitor);
-        
     }
 
     int action()
@@ -39,13 +29,7 @@ public:
         while (eeros::sequencer::Sequencer::running)
         {
             sleep(1.0);
-            log.info() << cs.q1.getOut().getSignal();
-            ServPos(1.5);
-            // log.info() << cs.myConstant.getOut().getSignal();
-            sleep(1.0);
-            ServPos(-1.5);
-            // log.info() << cs.myConstant.getOut().getSignal();
-            log.info() << "Right Motor Encoder" << cs.e1.getOut().getSignal();
+            log.info() << cs.e1.getOut().getSignal();
 
         }
         return 0;
@@ -58,11 +42,7 @@ private:
     AutMobRoSSafetyProperties &sp;
 
     eeros::sequencer::Wait sleep;
-    SetServoPos ServPos;
 
-    eeros::sequencer::Monitor TiltMonitor;
-    TiltCondition myTiltCondition;
-    TiltException myTiltException;
 };
 
 #endif // MAINSEQUENCE_HPP_
