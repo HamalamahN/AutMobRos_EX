@@ -5,8 +5,8 @@ ControlSystem::ControlSystem(double dt)
         e1("enc1"),
         e4("enc4"),
         Kp(pow((dt/(4.4*0.7)),2.0)),
-        Kd(2.0*dt/4.4), 
-        i_(104.0/3441), 
+        Kd_(dt*2.0/4.4), 
+        i_(104.0/3441.0), 
         kM_(1.0/0.00844), 
         Qmax(0.1),  
         R(8.0),
@@ -17,7 +17,7 @@ ControlSystem::ControlSystem(double dt)
     e1.setName("Encoder1");
     e4.setName("Encoder4");
     Kp.setName("Gain Kp");
-    Kd.setName("Gain Kd");
+    Kd_.setName("Gain Kd");
     M.setName("Proportianal J");
     i_.setName("Inverse Ratio");
     kM_.setName("Inverse Motor Torque Constant");
@@ -25,8 +25,6 @@ ControlSystem::ControlSystem(double dt)
     R.setName("Resistance");
     e.setName("Position Error");
     qc_2.setName("Second derivatice of qc");
-    qc_2.setInitCondition(0,0.1);
-    qc_2.setInitCondition(1,0.0005);
     deriv.setName("Derivative");
     M1.setName("Motor1");
 
@@ -35,7 +33,7 @@ ControlSystem::ControlSystem(double dt)
     e1.getOut().getSignal().setName("Encoder 1 Signal");
     e4.getOut().getSignal().setName("Encoder 4 Signal");
     Kp.getOut().getSignal().setName("Kp Gain");
-    Kd.getOut().getSignal().setName("Kd Gain");
+    Kd_.getOut().getSignal().setName("Kd Gain");
     M.getOut().getSignal().setName("M Gain");
     i_.getOut().getSignal().setName("i gain");
     kM_.getOut().getSignal().setName("kM Gain");
@@ -48,15 +46,11 @@ ControlSystem::ControlSystem(double dt)
     e.getIn(0).connect(e4.getOut());
     e.getIn(1).connect(e1.getOut());
     e.negateInput(1);
-    e.setInitCondition(0,0.0);
-    e.setInitCondition(1,0.0);
     Kp.getIn().connect(e.getOut());
     deriv.getIn().connect(e.getOut());
-    Kd.getIn().connect(deriv.getOut());
+    Kd_.getIn().connect(deriv.getOut());
     qc_2.getIn(0).connect(Kp.getOut());
-    qc_2.getIn(1).connect(Kd.getOut());
-    //qc_2.setInitCondition(0,0.0);
-    //qc_2.setInitCondition(1,0.0);
+    qc_2.getIn(1).connect(Kd_.getOut());
     M.getIn().connect(qc_2.getOut());
     Qmax.getIn().connect(M.getOut());
     i_.getIn().connect(Qmax.getOut());
@@ -66,8 +60,8 @@ ControlSystem::ControlSystem(double dt)
     // Add blocks to timedomain
     timedomain.addBlock(e1);
     timedomain.addBlock(e4);
+    timedomain.addBlock(Kd_);
     timedomain.addBlock(Kp);
-    timedomain.addBlock(Kd);
     timedomain.addBlock(M);
     timedomain.addBlock(Qmax);
     timedomain.addBlock(i_);

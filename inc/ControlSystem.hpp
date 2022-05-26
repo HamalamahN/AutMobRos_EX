@@ -22,7 +22,7 @@ public:
     PeripheralInput<> e1;
     PeripheralInput<> e4;
     Gain<> Kp;
-    Gain<> Kd;
+    Gain<> Kd_;
     D<> deriv;
     Gain<> M;
     Saturation<> Qmax;

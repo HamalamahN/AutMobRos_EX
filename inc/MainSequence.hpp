@@ -30,9 +30,8 @@ public:
         {
             sleep(1.0);
             log.info() << cs.deriv.getOut().getSignal();
-            log.info() << cs.Kd.getOut().getSignal();
-            log.info() << cs.qc_2.getOut().getSignal();
-            log.info() << cs.Kp.getOut().getSignal();
+            log.info() << cs.Kd_.getOut().getSignal();
+
 
         }
         return 0;
