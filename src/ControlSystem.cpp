@@ -4,11 +4,8 @@ ControlSystem::ControlSystem(double dt)
     : 
         e1("enc1"),
         e4("enc4"),
-        e(),
         Kp(pow((dt/(4.4*0.7)),2.0)),
-        deriv(),
         Kd_(dt*2.0/4.4), 
-        qc_2(),
         M(0.00007444),
         Qmax(0.1),
         i_(104.0/3441.0), 
