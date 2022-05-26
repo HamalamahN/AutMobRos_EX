@@ -3,7 +3,7 @@
 ControlSystem::ControlSystem(double dt)
     : myConstant(1.5), myGain(1.0), q1("quat1"), s1("servo1"), e1("enc1"),
       timedomain("Main time domain", dt, true),
-      k(0.0047746), i(104/3441), kM(1/0.00844), sat(0.03), M1("motor4"), R(8)
+      k(0.0047746), i(104.0/3441.0), kM(1/0.00844), sat(0.03), M1("motor4"), R(8.0)
 {
     // Name all blocks
     myConstant.setName("My constant Position");
@@ -45,7 +45,7 @@ ControlSystem::ControlSystem(double dt)
     i.getIn().connect(sat.getOut());
     kM.getIn().connect(i.getOut());
     R.getIn().connect(kM.getOut());
-    // M1.getIn().connect(R.getOut());
+    M1.getIn().connect(R.getOut());
 
     // Add blocks to timedomain
     timedomain.addBlock(myConstant);
@@ -59,7 +59,7 @@ ControlSystem::ControlSystem(double dt)
     timedomain.addBlock(i);
     timedomain.addBlock(kM);
     timedomain.addBlock(R);
-    //timedomain.addBlock(M1);
+    timedomain.addBlock(M1);
     
 
     // Add timedomain to executor
