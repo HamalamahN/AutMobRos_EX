@@ -4,12 +4,12 @@ ControlSystem::ControlSystem(double dt)
     : timedomain("Main time domain", dt, true),
         e1("enc1"),
         e4("enc4"),
-        Kp(pow((dt/(4.4*0.7)),2)),
-        Kd(2*dt/4.4), 
-        i_(104/3441), 
-        kM_(1/0.00844), 
+        Kp(pow((dt/(4.4*0.7)),2.0)),
+        Kd(2.0*dt/4.4), 
+        i_(104.0/3441), 
+        kM_(1.0/0.00844), 
         Qmax(0.1),  
-        R(8),
+        R(8.0),
         M(0.00007444),
         M1("motor1")
 {
@@ -45,14 +45,18 @@ ControlSystem::ControlSystem(double dt)
     qc_2.getOut().getSignal().setName("qc_2");
     deriv.getOut().getSignal().setName("Derivative signal");
     // Connect signals
-    e.getIn(0).connect(e1.getOut());
-    e.getIn(1).connect(e4.getOut());
+    e.getIn(0).connect(e4.getOut());
+    e.getIn(1).connect(e1.getOut());
     e.negateInput(1);
+    e.setInitCondition(0,0.0);
+    e.setInitCondition(1,0.0);
     Kp.getIn().connect(e.getOut());
     deriv.getIn().connect(e.getOut());
     Kd.getIn().connect(deriv.getOut());
     qc_2.getIn(0).connect(Kp.getOut());
     qc_2.getIn(1).connect(Kd.getOut());
+    //qc_2.setInitCondition(0,0.0);
+    //qc_2.setInitCondition(1,0.0);
     M.getIn().connect(qc_2.getOut());
     Qmax.getIn().connect(M.getOut());
     i_.getIn().connect(Qmax.getOut());
