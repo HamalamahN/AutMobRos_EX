@@ -45,7 +45,7 @@ ControlSystem::ControlSystem(double dt)
     i.getIn().connect(sat.getOut());
     kM.getIn().connect(i.getOut());
     R.getIn().connect(kM.getOut());
-    M1.getIn().connect(R.getOut());
+    // M1.getIn().connect(R.getOut());
 
     // Add blocks to timedomain
     timedomain.addBlock(myConstant);
@@ -58,8 +58,9 @@ ControlSystem::ControlSystem(double dt)
     timedomain.addBlock(sat);
     timedomain.addBlock(i);
     timedomain.addBlock(kM);
-    timedomain.addBlock(M1);
     timedomain.addBlock(R);
+    //timedomain.addBlock(M1);
+    
 
     // Add timedomain to executor
     eeros::Executor::instance().add(timedomain);

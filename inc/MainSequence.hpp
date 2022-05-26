@@ -40,10 +40,11 @@ public:
         {
             sleep(1.0);
             log.info() << cs.q1.getOut().getSignal();
-            ServPos(1.5);
+            log.info() << cs.R.getOut().getSignal();
+            // ServPos(1.5);
             // log.info() << cs.myConstant.getOut().getSignal();
-            sleep(1.0);
-            ServPos(-1.5);
+            // sleep(1.0);
+            // ServPos(-1.5);
             // log.info() << cs.myConstant.getOut().getSignal();
             log.info() << "Right Motor Encoder" << cs.e1.getOut().getSignal();
 
