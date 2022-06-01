@@ -23,15 +23,23 @@ public:
     PeripheralInput<> e4;
     Gain<> Kp;
     Gain<> Kd_;
-    D<> deriv;
+    D<> deriv_e;
+    
+    D<> deriv_q;
     Gain<> M;
     Saturation<> Qmax;
+    Saturation<> q_1max;
     Gain<> i_;
+    
+    Gain<> i;
     Gain<> kM_;
+    Gain<> kM;
     Gain<> R;
     PeripheralOutput<> M1;
+    
     Sum<> e;
     Sum<> qc_2;
+    Sum<> U;
     
     TimeDomain timedomain;
 };
