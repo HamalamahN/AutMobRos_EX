@@ -1,5 +1,5 @@
-#ifndef CUSTOMBLOCKTEMPLATE_HPP_
-#define CUSTOMBLOCKTEMPLATE_HPP_
+#ifndef PATHPLANNER_HPP_
+#define PATHPLANNER_HPP_
 
 #include <eeros/control/Block.hpp>
 // Include header files for the inputs, outputs and subblocks
@@ -7,10 +7,10 @@
 using namespace eeros::control;
 
 template <typename T = double>
-class CustomBlockName : public Block
+class Pathplanner : public Block
 {
 public:
-    CustomBlockName() 
+    Pathplanner() 
     {
         // Connect subblocks, initialize variables, ...
     }
@@ -27,4 +27,4 @@ protected:
     // Define inputs, outputs, intermediate variables and subblocks
 };
 
-#endif //CUSTOMBLOCKTEMPLATE_HPP_
+#endif //PATHPLANNER_HPP_

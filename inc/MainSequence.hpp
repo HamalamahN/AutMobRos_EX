@@ -29,8 +29,6 @@ public:
         while (eeros::sequencer::Sequencer::running)
         {
             sleep(1.0);
-            log.info() << cs.QMax.getOut().getSignal();
-            log.info() << cs.qdMax.getOut().getSignal();
         }
         return 0;
     }
