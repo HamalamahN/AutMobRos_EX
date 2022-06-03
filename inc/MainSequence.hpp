@@ -8,7 +8,6 @@
 #include "ControlSystem.hpp"
 #include <eeros/sequencer/Wait.hpp>
 
-
 class MainSequence : public eeros::sequencer::Sequence
 {
 public:
@@ -16,10 +15,11 @@ public:
                  eeros::safety::SafetySystem &ss,
                  AutMobRoSSafetyProperties &sp, ControlSystem &cs)
         : eeros::sequencer::Sequence(name, seq),
-            ss(ss),
-            sp(sp),
-            cs(cs),
-            sleep("Sleep", this)     
+          ss(ss),
+          sp(sp),
+          cs(cs),
+
+          sleep("Sleep", this)
     {
         log.info() << "Sequence created: " << name;
     }
@@ -28,17 +28,12 @@ public:
     {
         while (eeros::sequencer::Sequencer::running)
         {
-            sleep(0.5);
-            log.info() << cs.e1.getOut().getSignal();
-            log.info() << cs.e4.getOut().getSignal();
-            
-
-
-
+            sleep(1.0);
+            log.info() << cs.QMax.getOut().getSignal();
+            log.info() << cs.qdMax.getOut().getSignal();
         }
         return 0;
     }
-
 
 private:
     eeros::safety::SafetySystem &ss;
@@ -46,7 +41,6 @@ private:
     AutMobRoSSafetyProperties &sp;
 
     eeros::sequencer::Wait sleep;
-
 };
 
 #endif // MAINSEQUENCE_HPP_
